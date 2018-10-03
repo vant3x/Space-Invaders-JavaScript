@@ -3,25 +3,41 @@
 var canvas = document.getElementById('mainCanvas');
 var ctx = canvas.getContext('2d');
 
+// Crear el objeto de la nave
+var spaceShip = {
+  x:100,
+  y: canvas.height-100,
+  width: 50,
+  height: 50
+}
+
 // Definir variables para las imágenes 
-var fondo;
+var background;
 
 // Definición de funciones
 function loadMedia() {
-  fondo = new Image();
-  fondo.src = './assets/img/space1.jpg';
-  fondo.onload = function() {
+  background = new Image();
+  background.src = './assets/img/space1.jpg';
+  background.onload = function() {
     var intervalo = window.setInterval(frameLoop,100/55);
   }
 }
 
 function drawBackground() {
-  ctx.drawImage(fondo,0,0);
+  ctx.drawImage(background,0,0);
+}
+
+function drawSpaceShip() {
+  ctx.save();
+  ctx.fillStyle = 'white';
+  ctx.fillRect(spaceShip.x,spaceShip.y,spaceShip.width,spaceShip.height);
+  ctx.restore();
 }
 
 // frameLoop = actualizar posiciones jugadores | dibujar el background
 function frameLoop() {
   drawBackground();
+  drawSpaceShip();
 }
 
 // Ejecución de funciones
