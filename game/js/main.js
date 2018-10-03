@@ -11,9 +11,9 @@ var spaceShip = {
   height: 50
 }
 
-var keyboard = {
-
-}
+var keyboard = {}
+//Array para los disparos
+var shots = [];
 // Definir variables para las imágenes 
 var background;
 
@@ -72,11 +72,38 @@ function moveSpaceship() {
   }
 }
 
+function moveShots() {
+  for(var i in shots) {
+    var shot = shots[i];
+    shot.y -= 2; 
+  }
+  shots = shots.filter(function() {
+    return shot.y > 0;
+  });
+}
+
+function fire() {
+  shots.push({
+    x: spaceShip.x + 20,
+    y: spaceShip.y -10,
+    width: 10,
+    height: 30
+  })
+}
+
+function drawShots() {
+  ctx.save();
+  ctx.fillStyle = 'white';
+  ctx.restore();
+}
+
 // frameLoop = actualizar posiciones jugadores | dibujar el background
 function frameLoop() {
   moveSpaceship();
+  moveShots();
   drawBackground();
   drawSpaceShip();
+  drawShots();
 }
 
 // Ejecución de funciones
