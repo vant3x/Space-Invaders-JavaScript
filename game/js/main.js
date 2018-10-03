@@ -30,7 +30,7 @@ function loadMedia() {
   background.src = './assets/img/space1.jpg';
   background.onload = function() {
     // 1000/55 || 100/55;
-    var intervalo = window.setInterval(frameLoop,570/55);
+    var intervalo = window.setInterval(frameLoop,400/55);
   }
 }
 
@@ -113,10 +113,20 @@ function updateEnemies() {
             y: 10,
             height:  40,
             width: 40,
-            state: 'alive'
+            state: 'alive',
+            counter: 0
          });
       }
-      game.state == 'jugando';
+      game.state = 'jugando';
+
+   }
+   for(var i in enemies) {
+      var enemy = enemies[i];
+      if(!enemy) continue;
+      if(enemy && enemy.state == 'alive') {
+            enemy.counter++;
+            enemy.x += Math.sin(enemy.counter * Math.PI /90)*5;
+      }
    }
 }
 
