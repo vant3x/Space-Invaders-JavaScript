@@ -58,8 +58,23 @@ function AddKeyboardsEvents() {
   }
 }
 
+function moveSpaceship() {
+  if(keyboard[37]) {
+      // left
+    spaceShip.x -= 9;
+    if(spaceShip.x < 0) spaceShip.x = 0;
+  } 
+  else if(keyboard[39]) {
+      // right
+    var limite = canvas.width - spaceShip.width;
+    spaceShip.x += 9;
+    if(spaceShip.x > limite) spaceShip.x = limite;
+  }
+}
+
 // frameLoop = actualizar posiciones jugadores | dibujar el background
 function frameLoop() {
+  moveSpaceship();
   drawBackground();
   drawSpaceShip();
 }
