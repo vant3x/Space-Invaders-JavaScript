@@ -105,6 +105,21 @@ function moveSpaceship() {
   }
 }
 
+function updateEnemies() {
+   if (game.state == 'iniciando') {
+      for (var i = 0; i < 10;  i++) {
+         enemies.push({
+            x: 10 + (i*50),
+            y: 10,
+            height:  40,
+            width: 40,
+            state: 'alive'
+         });
+      }
+      game.state == 'jugando';
+   }
+}
+
 function moveShots() {
   for(var i in shots) {
     var shot = shots[i];
@@ -136,11 +151,13 @@ function drawShots() {
 
 // frameLoop = actualizar posiciones jugadores | dibujar el background
 function frameLoop() {
-  moveSpaceship();
-  moveShots();
-  drawBackground();
-  drawSpaceShip();
-  drawShots();
+    moveSpaceship();
+    updateEnemies();
+    moveShots();
+    drawBackground();
+    drawSpaceShip();
+    drawEnemies();
+    drawShots();
 }
 
 // Ejecución de funciones
