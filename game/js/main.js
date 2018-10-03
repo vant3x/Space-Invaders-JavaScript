@@ -11,6 +11,9 @@ var spaceShip = {
   height: 50
 }
 
+var keyboard = {
+
+}
 // Definir variables para las imágenes 
 var background;
 
@@ -34,6 +37,27 @@ function drawSpaceShip() {
   ctx.restore();
 }
 
+function AddKeyboardsEvents() {
+  addEvent(document,"keydown", function(e) {
+    // ponemos en true la tecla presioanda
+    keyboard[e.keyCode] = true;
+  });
+
+  addEvent(document,"keyup", function(e) {
+    // ponemos en true la tecla presioanda
+    keyboard[e.keyCode] = false;
+  });
+
+  function addEvent(element, eventName, funcion) {
+    if (element.addEventListener) {
+      element.addEventListener(eventName, funcion, false);
+    } else if(element.attachEvent) {
+      // IE
+      elemento.attachEvent(eventName,  funcion);
+    }
+  }
+}
+
 // frameLoop = actualizar posiciones jugadores | dibujar el background
 function frameLoop() {
   drawBackground();
@@ -42,3 +66,4 @@ function frameLoop() {
 
 // Ejecución de funciones
 loadMedia();
+AddKeyboardsEvents();
