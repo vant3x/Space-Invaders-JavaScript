@@ -11,9 +11,16 @@ var spaceShip = {
   height: 50
 }
 
+var game = {
+  state: 'iniciando'
+};
+
+
 var keyboard = {}
 //Array para los disparos
 var shots = [];
+// Array enemgios
+var enemies = [];
 // Definir variables para las imágenes 
 var background;
 
@@ -24,6 +31,19 @@ function loadMedia() {
   background.onload = function() {
     // 1000/55 || 100/55;
     var intervalo = window.setInterval(frameLoop,570/55);
+  }
+}
+
+function drawEnemies() {
+  for(var i in enemies) {
+    var enemy = enemies[i];
+    ctx.save();
+    if (enemy.state == 'alive') {
+      ctx.fillStyle = 'red';
+    } else if(enemy.state == 'dead') {
+      ctx.fillStyle = 'black';
+    }
+    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
   }
 }
 
