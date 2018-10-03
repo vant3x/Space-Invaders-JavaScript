@@ -22,7 +22,8 @@ function loadMedia() {
   background = new Image();
   background.src = './assets/img/space1.jpg';
   background.onload = function() {
-    var intervalo = window.setInterval(frameLoop,100/55);
+    // 1000/55 || 100/55;
+    var intervalo = window.setInterval(frameLoop,570/55);
   }
 }
 
@@ -61,14 +62,26 @@ function AddKeyboardsEvents() {
 function moveSpaceship() {
   if(keyboard[37]) {
       // left
-    spaceShip.x -= 9;
+    spaceShip.x -= 7;
     if(spaceShip.x < 0) spaceShip.x = 0;
   } 
   else if(keyboard[39]) {
       // right
     var limite = canvas.width - spaceShip.width;
-    spaceShip.x += 9;
+    spaceShip.x += 7;
     if(spaceShip.x > limite) spaceShip.x = limite;
+  }
+
+  if(keyboard[32]) {
+    // Shots 
+    if (!keyboard.fire) {
+      fire();
+      keyboard.fire = true;
+    } 
+    else {
+      keyboard.fire = false;
+    }
+   
   }
 }
 
@@ -85,7 +98,7 @@ function moveShots() {
 function fire() {
   shots.push({
     x: spaceShip.x + 20,
-    y: spaceShip.y -10,
+    y: spaceShip.y - 10,
     width: 10,
     height: 30
   })
@@ -94,6 +107,10 @@ function fire() {
 function drawShots() {
   ctx.save();
   ctx.fillStyle = 'white';
+  for(var i in shots) {
+    var shot = shots[i];
+    ctx.fillRect(shot.x, shot.y, shot.width, shot.height);
+  }
   ctx.restore();
 }
 
