@@ -127,9 +127,20 @@ function updateEnemies() {
             enemy.counter++;
             enemy.x += Math.sin(enemy.counter * Math.PI /90)*5;
       }
+      if(enemy && enemy.state == 'hit') {
+        enemy.counter++;
+        if(enemy.counter >= 20) {
+          enemy.state = 'dead';
+          enemy.counter = 0;
+        }
+      }
    }
+   enemies = enemies.filter(function(enemy){
+    if(enemy && enemy.state != 'dead') return true;
+    return false;
+   });
 }
-
+// movers disparos
 function moveShots() {
   for(var i in shots) {
     var shot = shots[i];
@@ -159,10 +170,12 @@ function drawShots() {
   ctx.restore();
 }
 
+
+// colisiones
 function hit(a, b) {
   var hit = false;
   if(b.x + b.width >= a.x && b.x < a.x + a.width) {
-    if(b.y + b.height >= a.y && b.y + < a.y + a.height) {
+    if(b.y + b.height >= a.y && b.y  < a.y + a.height) {
       hit = true;
     }
   }
@@ -179,6 +192,20 @@ function hit(a, b) {
   return hit;
 }
 
+function verificarContacto() {
+  for(var i in shots) {
+    var shot = shots[i];
+    for(j in enemies) {
+      var enemy = enemies[j];
+      if(hit(shot,enemy)){
+        enemy.state = 'hit';
+        enemy.counter = 0;
+        console.log('Hubo contacto');
+      }
+    }
+  }
+}
+
 // frameLoop = actualizar posiciones jugadores | dibujar el background
 function frameLoop() {
     moveSpaceship();
@@ -188,6 +215,7 @@ function frameLoop() {
     drawSpaceShip();
     drawEnemies();
     drawShots();
+    verificarContacto();
 }
 
 // Ejecución de funciones
