@@ -21,6 +21,8 @@ var keyboard = {}
 var shots = [];
 // Array enemgios
 var enemies = [];
+// disparos enemigos 
+var enemyShots;
 // Definir variables para las imágenes 
 var background;
 
@@ -105,6 +107,16 @@ function moveSpaceship() {
   }
 }
 
+function drawEnemyShots() {
+  for(var i in enemyShots) {
+    var shot = enemyShots[i];
+    ctx.save();
+    ctx.fillStyle = 'yellow';
+    ctx.restore();
+    ctx.fillRect(shot.x, shot.y, shot.width, shot.height);
+  }
+}
+
 function updateEnemies() {
    if (game.state == 'iniciando') {
       for (var i = 0; i < 10;  i++) {
@@ -148,6 +160,16 @@ function moveShots() {
   }
   shots = shots.filter(function() {
     return shot.y > 0;
+  });
+}
+
+function MoveEnemyShots() {
+  for(var i in enemyShots) {
+    var shot = enemyShots[i];
+    shot.x += 3;
+  }
+  enemyShots = enemyShots.filter(function(shot) {
+    return shot.y < canvas.height;
   });
 }
 
@@ -214,6 +236,7 @@ function frameLoop() {
     drawBackground();
     drawSpaceShip();
     drawEnemies();
+    drawEnemyShots();
     drawShots();
     verificarContacto();
 }
