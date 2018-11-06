@@ -8,7 +8,7 @@ var spaceShip = {
   x:100,
   y: canvas.height-100,
   width: 50,
-  height: 50
+  height: 50,
 }
 
 var game = {
@@ -241,6 +241,14 @@ function verificarContacto() {
         enemy.counter = 0;
         console.log('Hubo contacto');
       }
+    }
+  }
+  if (spaceShip.state == 'hit' || spaceShip.state == 'dead') return;
+  for(var i in enemyShots) {
+    var shot = enemyShots[i];
+    if(hit(shot,spaceShip)) {
+      spaceShip.state = 'hit';
+      console.log('contacto')
     }
   }
 }
