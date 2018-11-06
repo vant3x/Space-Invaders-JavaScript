@@ -22,7 +22,7 @@ var shots = [];
 // Array enemgios
 var enemies = [];
 // disparos enemigos 
-var enemyShots;
+var enemyShots = [];
 // Definir variables para las imágenes 
 var background;
 
@@ -32,7 +32,7 @@ function loadMedia() {
   background.src = './assets/img/space1.jpg';
   background.onload = function() {
     // 1000/55 || 100/55;
-    var intervalo = window.setInterval(frameLoop,400/55);
+    var intervalo = window.setInterval(frameLoop,450/55);
   }
 }
 
@@ -112,12 +112,31 @@ function drawEnemyShots() {
     var shot = enemyShots[i];
     ctx.save();
     ctx.fillStyle = 'yellow';
-    ctx.restore();
     ctx.fillRect(shot.x, shot.y, shot.width, shot.height);
+    ctx.restore();
   }
 }
 
+function moveEnemyShots() {
+  for(var i in enemyShots) {
+    var shot = enemyShots[i];
+    shot.y += 3;
+  }
+  enemyShots = enemyShots.filter(function(shot){
+    return shot.y < canvas.height;
+  });
+}
+
 function updateEnemies() {
+  function addEnemyShots(enemy) {
+    return {
+      x: enemy.x,
+      y: enemy.y,
+      width: 10,
+      height: 33,
+      counter: 0
+    }
+  }
    if (game.state == 'iniciando') {
       for (var i = 0; i < 10;  i++) {
          enemies.push({
@@ -138,6 +157,10 @@ function updateEnemies() {
       if(enemy && enemy.state == 'alive') {
             enemy.counter++;
             enemy.x += Math.sin(enemy.counter * Math.PI /90)*5;
+
+            if(random(0,enemies.length * 10) == 4) {
+              enemyShots.push(addEnemyShots(enemy))
+            }
       }
       if(enemy && enemy.state == 'hit') {
         enemy.counter++;
@@ -152,6 +175,9 @@ function updateEnemies() {
     return false;
    });
 }
+
+
+
 // movers disparos
 function moveShots() {
   for(var i in shots) {
@@ -163,15 +189,6 @@ function moveShots() {
   });
 }
 
-function MoveEnemyShots() {
-  for(var i in enemyShots) {
-    var shot = enemyShots[i];
-    shot.x += 3;
-  }
-  enemyShots = enemyShots.filter(function(shot) {
-    return shot.y < canvas.height;
-  });
-}
 
 function fire() {
   shots.push({
@@ -228,16 +245,24 @@ function verificarContacto() {
   }
 }
 
+function random(bottom,top) {
+  var possibilities = top - bottom;
+  var randomNumb = Math.random() * possibilities;
+  randomNumb = Math.floor(randomNumb);
+  return parseInt(bottom) + randomNumb;
+}
+
 // frameLoop = actualizar posiciones jugadores | dibujar el background
 function frameLoop() {
     moveSpaceship();
-    updateEnemies();
     moveShots();
+    moveEnemyShots();
     drawBackground();
-    drawSpaceShip();
+    updateEnemies();
     drawEnemies();
     drawEnemyShots();
     drawShots();
+    drawSpaceShip();
     verificarContacto();
 }
 
