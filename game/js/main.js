@@ -15,6 +15,12 @@ var game = {
   state: 'iniciando'
 };
 
+// respuesta al ganar o perder
+var responseText = {
+  counter: -1,
+  title: '',
+  subtitle: ''
+}
 
 var keyboard = {}
 //Array para los disparos
@@ -210,6 +216,46 @@ function drawShots() {
 }
 
 
+
+// actualizar el estado del juego
+function drawText() {
+  if(responseText.counter == -1) return;
+  var alpha = responseText.counter / 50.0;
+  if (alpha > 1) {
+    for (var i in enemies) {
+      delete enemies[i];
+    }
+  }
+  ctx.save();
+  ctx.gloablAlpha = alpha;
+  if (game.state == 'perdido') {
+    ctx.fillStyle = 'white';
+    ctx.font = 'Bold 36pt Arial';
+    ctx.fillText(responseText.title, 60,200);
+    ctx.font = '16pt Arial';
+    ctx.fillText(responseText.subtitle, 150,250);
+  }
+  if (game.state == 'victoria') {
+    ctx.fillStyle = 'white';
+    ctx.font = 'Bold 36pt Arial';
+    ctx.fillText(responseText.title, 60,200);
+    ctx.font = '16pt Arial';
+    ctx.fillText(responseText.subtitle, 200,250);
+  }
+}
+
+function updateGameState() {
+  if(game.state == 'jugando' && enemies.length == 0) {
+    game.state = 'victoria';
+    responseText.title = 'Derrotaste a las naves enemigas';
+    responseText.subtitle = 'Presiona la tecla R para reiniciar el juego';
+    responseText.counter = 0;
+  }
+  if(responseText.counter >= 0) {
+    responseText.counter++;
+  }
+}
+
 // colisiones
 function hit(a, b) {
   var hit = false;
@@ -262,6 +308,8 @@ function random(bottom,top) {
 
 // frameLoop = actualizar posiciones jugadores | dibujar el background
 function frameLoop() {
+  /* update */ 
+    updateGameState();
     moveSpaceship();
     moveShots();
     moveEnemyShots();
@@ -272,6 +320,7 @@ function frameLoop() {
     drawShots();
     drawSpaceShip();
     verificarContacto();
+    drawText();
 }
 
 // Ejecución de funciones
