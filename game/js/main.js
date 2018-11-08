@@ -9,6 +9,7 @@ var spaceShip = {
   y: canvas.height-100,
   width: 50,
   height: 50,
+  counter: 0
 }
 
 var game = {
@@ -89,12 +90,12 @@ function AddKeyboardsEvents() {
 
 function moveSpaceship() {
   if(keyboard[37]) {
-      // left
+    // left
     spaceShip.x -= 7;
     if(spaceShip.x < 0) spaceShip.x = 0;
   } 
-  else if(keyboard[39]) {
-      // right
+  if(keyboard[39]) {
+    // right
     var limite = canvas.width - spaceShip.width;
     spaceShip.x += 7;
     if(spaceShip.x > limite) spaceShip.x = limite;
@@ -105,11 +106,19 @@ function moveSpaceship() {
     if (!keyboard.fire) {
       fire();
       keyboard.fire = true;
-    } 
-    else {
-      keyboard.fire = false;
-    }
-   
+    }    
+  }
+  else keyboard.fire = false;
+  if (spaceShip.state == 'hit') {
+      spaceShip.counter++;
+      if(spaceShip.counter >= 20) {
+        spaceShip.counter = 0;
+        spaceShip.state = 'dead';
+        game.state = 'perdido';
+        responseText.title = 'Game Over :(';
+        responseText.subtitle = 'Presiona la tecla R para reiniciar el juego';
+        responseText.counter = 0;
+      }
   }
 }
 
@@ -231,14 +240,14 @@ function drawText() {
   if (game.state == 'perdido') {
     ctx.fillStyle = 'white';
     ctx.font = 'Bold 36pt Arial';
-    ctx.fillText(responseText.title, 60,200);
+    ctx.fillText(responseText.title, 285,200);
     ctx.font = '16pt Arial';
-    ctx.fillText(responseText.subtitle, 150,250);
+    ctx.fillText(responseText.subtitle, 250,250);
   }
   if (game.state == 'victoria') {
     ctx.fillStyle = 'white';
     ctx.font = 'Bold 36pt Arial';
-    ctx.fillText(responseText.title, 60,200);
+    ctx.fillText(responseText.title, 55,200);
     ctx.font = '16pt Arial';
     ctx.fillText(responseText.subtitle, 200,250);
   }
