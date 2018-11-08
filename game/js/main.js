@@ -47,11 +47,8 @@ function drawEnemies() {
   for(var i in enemies) {
     var enemy = enemies[i];
     ctx.save();
-    if (enemy.state == 'alive') {
-      ctx.fillStyle = 'red';
-    } else if(enemy.state == 'dead') {
-      ctx.fillStyle = 'black';
-    }
+    if (enemy.state == 'alive') ctx.fillStyle = 'red';
+    if(enemy.state == 'dead') ctx.fillStyle = 'black';
     ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
   }
 }
@@ -164,7 +161,6 @@ function updateEnemies() {
          });
       }
       game.state = 'jugando';
-
    }
    for(var i in enemies) {
       var enemy = enemies[i];
@@ -262,6 +258,12 @@ function updateGameState() {
   }
   if(responseText.counter >= 0) {
     responseText.counter++;
+  }
+
+  if ((game.state == 'perdido' || game.state == 'victoria') && keyboard[82]) {
+    game.state == 'iniciando';
+    spaceShip.state = 'alive';
+    responseText.counter = -1;
   }
 }
 
